@@ -28,7 +28,7 @@ concurrency:
 
 env:
   LOCAL_IMAGE: immich-machine-learning:ci
-  RELEASE_IMAGE: ghcr.io/bysamio/immich-machine-learning:3.3.5-r1-${{ github.run_id }}-${{ github.run_attempt }}
+  RELEASE_IMAGE: ghcr.io/bysamio/immich-machine-learning:3.4.2-r1-${{ github.run_id }}-${{ github.run_attempt }}
 
 jobs:
   verify:
@@ -47,6 +47,8 @@ jobs:
           target: runtime
           platforms: linux/amd64
           pull: true
+          # Re-run Debian upgrades against the pinned base on security rebuilds.
+          no-cache: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
           load: true
           push: false
           tags: ${{ env.LOCAL_IMAGE }}

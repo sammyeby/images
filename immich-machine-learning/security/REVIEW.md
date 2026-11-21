@@ -1,4 +1,26 @@
-# ML dependency review — 1 November 2026
+# ML dependency review — 21 November 2026
+
+The current base is official Immich v3.4.2, amd64 manifest
+`72db2089878746176c1a5083272cd2d73e4270f839596b42bdf6b12887bbbb89`.
+Local ARM64 compatibility checks use its matching `0cd97ded…` manifest.
+The complete installed inventory is regenerated in `runtime.lock`.
+
+Upstream now supplies Pillow 13, newer certifi, requests and python-dotenv;
+these overlays are retired to avoid downgrades. The remaining hashed wheel
+patches retain their fixes and add OpenTelemetry API 1.45.2 for
+[CVE-2026-126360](https://github.com/advisories/GHSA-mf5v-w3w3-f6cg), found by the
+independent Python audit. Debian packages receive all available Trixie updates,
+including the apt and zlib fixes that caused the scheduled CI failure.
+Scheduled/manual builds bypass the cache so new fixes reach the pinned base.
+
+The current independent Python audit reports no known vulnerabilities. Runtime
+inference, exact inventory and restrictions are checked with the current image;
+native amd64 CI remains the publication gate. Full reports retain unfixed Debian
+findings. Review again by 28 November 2026 and before expanding the pilot.
+The historical evidence below describes 3.3.5 only.
+
+## Historical 3.3.5 review — 1 November 2026
+
 
 The official [v3.3.5 application](https://github.com/immich-app/immich/tree/v3.3.5/machine-learning)
 and CPU ONNX runtime are retained. The base is pinned to amd64 manifest

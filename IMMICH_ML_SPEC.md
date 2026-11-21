@@ -1,9 +1,10 @@
 # Immich ML CPU trial
 
 Enable local Smart Search for the home server's 524-asset sample on 16 GB RAM.
-The existing v3.3.5 server, PostgreSQL and Paperless images remain unchanged.
+The server and ML worker track upstream v3.4.2. The PostgreSQL fixture remains
+on its supported major 17. This specification describes the ML worker contract.
 
-The `immich-machine-learning/` derivative keeps the exact official v3.3.5
+The `immich-machine-learning/` derivative keeps the exact official v3.4.2
 application and ONNX runtime. Replace only vulnerable Python packages with
 published, hash-verified wheels. No source distributions or package build scripts
 run during installation. Preserve the full filesystem scan and Python audit;
@@ -21,7 +22,7 @@ CI, and local ARM64 compatibility tests. Test actual HTTP visual/textual vectors
 invalid requests, no-network startup and inference, inactive-model unloading and
 reload, hardening and memory limits. Audit installed dependencies against the
 committed runtime inventory. CI publishes only the exact tested image on main
-under a unique v3.3.5-r1 run/attempt tag; never latest.
+under a unique v3.4.2-r1 run/attempt tag; never latest.
 
 Rollout uses a separate guarded home-server change for settings, backup profile
 and rollback. No full-library expansion, face/OCR/duplicate jobs, credentials,

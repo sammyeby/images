@@ -147,7 +147,7 @@ jobs:
       - name: Test image runs as non-root
         run: |
           # Verify the image runs as non-root (UID 1001)
-          USER_ID=$(docker run --rm postgresql:test id -u)
+          USER_ID=$(docker run --rm --entrypoint id postgresql:test -u)
           if [ "$USER_ID" != "1001" ]; then
             echo "ERROR: Container is running as UID $USER_ID, expected 1001"
             exit 1

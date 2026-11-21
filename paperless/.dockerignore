@@ -1,6 +1,5 @@
 **
 !Dockerfile
 !requirements-patches.txt
-!apply-ai-chat-fix.py
 !apply-ai-context-fix.py
 !token-budget.py

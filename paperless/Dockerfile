@@ -1,35 +1,26 @@
-# Source/entrypoint contract: https://github.com/paperless-ngx/paperless-ngx/blob/v3.3.2/Dockerfile
-FROM ghcr.io/paperless-ngx/paperless-ngx:3.3.2@sha256:d232cba37cc0bab0d6c6581ecd320383b7a6f49f33e0fd16adda4d009eb600dd AS dependencies
+# Source/entrypoint contract: https://github.com/paperless-ngx/paperless-ngx/blob/v3.5.1/Dockerfile
+FROM ghcr.io/paperless-ngx/paperless-ngx:3.5.1@sha256:8508853b8a0f8394074260957d0be186c8c64f346973b24a7583de4580f306b9 AS dependencies
 
 USER 0:0
 ARG DEBIAN_FRONTEND=noninteractive
-ARG LIBRSVG_VERSION="2.60.0+dfsg-1+deb13u1"
-ARG CURL_VERSION="8.14.1-2+deb13u7"
-ARG GHOSTSCRIPT_VERSION="10.05.1~dfsg-1+deb13u3"
 LABEL org.opencontainers.image.source="https://github.com/bysamio/images" \
       org.opencontainers.image.documentation="https://github.com/bysamio/images/tree/main/paperless" \
-      org.opencontainers.image.version="3.3.2-r1" \
+      org.opencontainers.image.version="3.5.1-r1" \
       org.opencontainers.image.title="BySam.io Paperless-ngx" \
       org.opencontainers.image.licenses="GPL-3.0-only"
 
 COPY requirements-patches.txt /tmp/bysamio-requirements-patches.txt
-# Debian security backports fix document-parser sandbox escape and Pdfwrite
-# overflow. Keep Trixie libraries together; never mix Debian distributions.
+# Refresh all installed Trixie packages so newly published fixes for apt,
+# ImageMagick, Brotli, Expat, PostgreSQL and zlib reach the pinned filesystem.
+# This also retains the earlier librsvg, curl and Ghostscript security fixes.
+# Keep Trixie libraries together; never mix Debian distributions.
 # SVG parser Trixie backport: https://security-tracker.debian.org/tracker/DSA-6555-1
 # Curl Trixie backports: https://security-tracker.debian.org/tracker/DSA-6558-1
 # https://security-tracker.debian.org/tracker/CVE-2026-101258
 # https://security-tracker.debian.org/tracker/CVE-2026-103226
 RUN set -eux; \
     apt-get update; \
-    apt-get install --yes --no-install-recommends --only-upgrade \
-      "librsvg2-2=${LIBRSVG_VERSION}" \
-      "curl=${CURL_VERSION}" \
-      "libcurl4t64=${CURL_VERSION}" \
-      "libcurl3t64-gnutls=${CURL_VERSION}" \
-      "ghostscript=${GHOSTSCRIPT_VERSION}" \
-      "libgs-common=${GHOSTSCRIPT_VERSION}" \
-      "libgs10=${GHOSTSCRIPT_VERSION}" \
-      "libgs10-common=${GHOSTSCRIPT_VERSION}"; \
+    apt-get upgrade --yes --no-install-recommends; \
     uv --no-config pip install --system --no-cache --no-deps \
       --only-binary :all: --require-hashes --default-index https://pypi.org/simple \
       --requirements /tmp/bysamio-requirements-patches.txt; \
@@ -48,18 +39,12 @@ RUN set -eux; \
 
 # Upstream rootless mode uses the process UID directly. Consumers with bind
 # mounts set `user: UID:GID`; USERMAP_UID/GID are for upstream root startup only.
-# https://github.com/paperless-ngx/paperless-ngx/blob/v3.3.2/docs/setup.md
+# https://github.com/paperless-ngx/paperless-ngx/blob/v3.5.1/docs/setup.md
 USER 1000:1000
 
-# The source hash pins the upstream code this correction was tested against.
-# Keep permission filters, citations, read-lock lifetime and streaming unchanged.
+# Upstream 3.5.1 synthesizes the already-filtered nodes directly. Keep that
+# retrieval/streaming fix and its shorter index-lock lifetime unchanged.
 FROM dependencies AS runtime
-USER 0:0
-COPY apply-ai-chat-fix.py /tmp/bysamio-ai-chat-fix.py
-RUN python3 -I -B /tmp/bysamio-ai-chat-fix.py && rm /tmp/bysamio-ai-chat-fix.py
-LABEL org.opencontainers.image.version="3.3.2-r1"
-USER 1000:1000
-
 # Public tokenizer data only; fixed revision, independent checksum and license.
 # No Hugging Face client, model weights, remote code or runtime download is used.
 # https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507/tree/cdbee75f17c01a7cc42f958dc650907174af0554

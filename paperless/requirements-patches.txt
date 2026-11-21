@@ -1,3 +1,6 @@
-# CVE-2026-104851; overlay on the pinned upstream environment.
-# Only wheels are permitted; no dependency or package build scripts run.
-fsspec==2026.6.0 --hash=sha256:02e0b71817df9b2169dc30a16832045764def1191b43dcff5bb85bdee212d2a1
+# Published fixes still missing from the pinned Paperless 3.5.1 environment.
+# Only reviewed, SHA256-pinned wheels; no package builds or dependency resolution.
+# CVE-2026-126297 / CVE-2026-81726 and related NLTK advisories
+nltk==3.10.4 --hash=sha256:769ba5413f265b7d3e87cd163cc28efa01e29eeef8bb6080bc907949d9fcfb51
+# CVE-2026-118669 / CVE-2026-49272
+oauthlib==4.0.1 --hash=sha256:498a298876e996301950a5b053d12c31628bb7b895db03666430c69ce182eb61

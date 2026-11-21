@@ -3,7 +3,7 @@
 
 REGISTRY := ghcr.io
 IMAGE_NAME := bysamio/wordpress
-WORDPRESS_VERSION := 7.1.3
+WORDPRESS_VERSION := 7.1.5
 TAG := $(WORDPRESS_VERSION)
 CONTAINER_ENGINE ?= docker
 IMAGE ?= wordpress:local

@@ -140,7 +140,7 @@ docker build -t ghcr.io/bysamio/wordpress:latest .
 ### Build with specific WordPress version
 
 ```bash
-docker build --build-arg WORDPRESS_VERSION=7.1.3 -t ghcr.io/bysamio/wordpress:7.1.3 .
+docker build --build-arg WORDPRESS_VERSION=7.1.5 -t ghcr.io/bysamio/wordpress:7.1.5 .
 ```
 
 ### Multi-platform Build
@@ -178,7 +178,7 @@ dispatch:
    current upstream tag and Debian security updates.
 2. **Publish** (`main` only, after verify passes): push linux/amd64 and linux/arm64
    by digest, gate each platform on fixable HIGH/CRITICAL findings, and only then apply
-   the `7.1.3`, `latest`, commit-SHA and `main` tags. A weekly run therefore
+   the `7.1.5`, `latest`, commit-SHA and `main` tags. A weekly run therefore
    republishes the same version tag with current OS patches; a failing gate leaves the
    previous image tagged and fails the run.
 3. **PHP release check** (weekly and manual runs): Trivy cannot see PHP, which the
@@ -203,7 +203,7 @@ January 2026) cleared 844 fixable HIGH/CRITICAL CVEs, including 28 CRITICAL.
 
 101 HIGH/CRITICAL CVEs remain (163 package occurrences, 2 CRITICAL). Debian has not
 released a fix for any of them, and the counts are identical to upstream
-`wordpress:7.1.3-apache`, so this image adds none. The weekly rebuild applies each fix
+`wordpress:7.1.5-apache`, so this image adds none. The weekly rebuild applies each fix
 as soon as Debian publishes it.
 
 | Package(s) | CVEs | Notes |
@@ -220,12 +220,12 @@ latest workflow run or run `make scan-report`.
 
 ## Upgrading from 6.9
 
-This release moves WordPress core from 6.9 to 7.1.3, PHP from 8.3.30 to 8.3.36 and
+This release moves WordPress core from 6.9 to 7.1.5, PHP from 8.3.30 to 8.3.37 and
 Debian from 13.3 to 13.7. PHP and the OS packages live in the image, so rolling out the
 new image applies the PHP2Shell fix immediately, including on existing volumes.
 
 WordPress core is different. The upstream entrypoint copies WordPress into `/var/www/html`
-only when that directory has no WordPress yet. Fresh installs get 7.1.3, but an
+only when that directory has no WordPress yet. Fresh installs get 7.1.5, but an
 existing persistent volume keeps its installed core until you update it from the
 WordPress dashboard after rolling out the new image. WP-CLI works too, but only when
 run as the file owner, UID 1001. Back up the database and volume first.

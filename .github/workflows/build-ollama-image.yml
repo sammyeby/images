@@ -28,7 +28,7 @@ concurrency:
 
 env:
   LOCAL_IMAGE: ollama:ci
-  RELEASE_IMAGE: ghcr.io/bysamio/ollama:0.40.3-cpu-r1-${{ github.run_id }}-${{ github.run_attempt }}
+  RELEASE_IMAGE: ghcr.io/bysamio/ollama:0.40.16-cpu-r1-${{ github.run_id }}-${{ github.run_attempt }}
 
 jobs:
   verify:

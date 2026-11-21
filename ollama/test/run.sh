@@ -71,7 +71,7 @@ for _ in {1..90}; do
   sleep 1
 done
 $ready || { printf 'FAIL: restricted fresh startup did not become ready\n' >&2; exit 1; }
-api 5 api/version | python3 -c 'import json,sys; assert json.load(sys.stdin)=={"version":"0.40.3"}'
+api 5 api/version | python3 -c 'import json,sys; assert json.load(sys.stdin)=={"version":"0.40.16"}'
 # Expand these checks inside the container shell.
 # shellcheck disable=SC2016
 "$CONTAINER_ENGINE" exec "$test_name" sh -ec 'test -s "$HOME/.ollama/id_ed25519"; test "$(stat -c %a "$HOME/.ollama/id_ed25519")" = 600; test "$(id -u)" = 1000; grep -Eq "^CapEff:[[:space:]]+0+$" /proc/1/status; grep -Eq "^NoNewPrivs:[[:space:]]+1$" /proc/1/status; test ! -d /usr/lib/ollama/cuda_v12; test ! -d /usr/lib/ollama/vulkan'

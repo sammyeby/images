@@ -18,7 +18,7 @@ on:
       postgresql_version:
         description: 'PostgreSQL version to build'
         required: false
-        default: '17.10'
+        default: '17.12'
       push_image:
         description: 'Push image to registry'
         required: false
@@ -28,7 +28,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: bysamio/postgresql
-  POSTGRESQL_VERSION: ${{ github.event.inputs.postgresql_version || '17.10' }}
+  POSTGRESQL_VERSION: ${{ github.event.inputs.postgresql_version || '17.12' }}
 
 jobs:
   build:

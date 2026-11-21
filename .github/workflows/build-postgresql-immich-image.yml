@@ -28,7 +28,7 @@ concurrency:
 
 env:
   LOCAL_IMAGE: postgresql-immich:ci
-  RELEASE_IMAGE: ghcr.io/bysamio/postgresql-immich:17.11-vchord1.1.1-vector0.8.7-r1-${{ github.run_id }}-${{ github.run_attempt }}
+  RELEASE_IMAGE: ghcr.io/bysamio/postgresql-immich:17.12-vchord1.1.1-vector0.8.7-r1-${{ github.run_id }}-${{ github.run_attempt }}
 
 jobs:
   verify:
@@ -47,6 +47,8 @@ jobs:
           target: runtime
           platforms: linux/amd64
           pull: true
+          # Refresh Alpine security packages while reusing compiled extensions.
+          no-cache-filters: runtime
           load: true
           push: false
           tags: ${{ env.LOCAL_IMAGE }}

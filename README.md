@@ -11,11 +11,15 @@ This repository contains custom Docker images designed to:
 - **Security Hardened**: Optimized for Kubernetes Pod Security Standards (restricted mode)
 - **Production Ready**: Tested and maintained for production workloads
 
+The [upstream refresh validation](upstream-refresh-validation.json) records the
+current local build/runtime results, exact candidate image IDs and full-scan
+counts. Native CI separately verifies release artifacts before publication.
+
 ## Available Images
 
 ### Immich
 
-Immich 3.3.5 with checksum-pinned source, reviewed pnpm security fixes and updated
+Immich 3.4.2 with checksum-pinned source, reviewed pnpm security fixes and updated
 native Brotli, retaining the upstream UI/mobile protocol and media tools. The
 native amd64 release gate exercises API validation, WebSockets, photo upload,
 original-file integrity and thumbnail generation. See
@@ -23,14 +27,14 @@ original-file integrity and thumbnail generation. See
 
 ### Immich Machine Learning
 
-CPU-only v3.3.5 Smart Search worker with a hash-locked Python security overlay,
+CPU-only v3.4.2 Smart Search worker with a hash-locked Python security overlay,
 non-root runtime and real offline inference/limits tests. Native amd64 CI audits
 and scans before publishing the exact tested artifact. See
 [immich-machine-learning/README.md](immich-machine-learning/README.md).
 
 ### PostgreSQL for Immich
 
-Dedicated PostgreSQL 17.11 / VectorChord 1.1.1 / pgvector 0.8.7 variant, built
+Dedicated PostgreSQL 17.12 / VectorChord 1.1.1 / pgvector 0.8.7 variant, built
 against the exact Alpine server and running as UID/GID 1001. Its independent
 publication workflow tests restricted startup, vector queries, persistence and
 logical restore before scanning and publishing a unique digest-pinnable release.
@@ -48,7 +52,7 @@ complete scan findings, update procedure and native coverage limits.
 
 Security-hardened Keycloak images with a flexible Alpine default and an optimized distroless variant.
 
-- **Image**: `ghcr.io/bysamio/keycloak:26.7.4`
+- **Image**: `ghcr.io/bysamio/keycloak:26.8.2`
 - **Documentation**: [keycloak/README.md](keycloak/README.md)
 - **Features**:
   - Runtime provider/SPI support in the default image
@@ -66,14 +70,14 @@ docker run -d \
   -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
   -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin \
   -e KC_DB=dev-mem \
-  ghcr.io/bysamio/keycloak:26.7.4
+  ghcr.io/bysamio/keycloak:26.8.2
 ```
 
 ### PostgreSQL
 
 A security-hardened PostgreSQL image with minimal CVEs, built on Alpine Linux.
 
-- **Image**: `ghcr.io/bysamio/postgresql:17.10` or `ghcr.io/bysamio/postgresql:17.10-alpine`
+- **Image**: `ghcr.io/bysamio/postgresql:17.12` or `ghcr.io/bysamio/postgresql:17.12-alpine`
 - **Documentation**: [postgresql/README.md](postgresql/README.md)
 - **Features**:
   - Minimal CVEs (Alpine base)
@@ -90,14 +94,14 @@ docker run -d \
   -e POSTGRES_PASSWORD=secretpassword \
   -e POSTGRES_USER=postgres \
   -e POSTGRES_DB=postgres \
-  ghcr.io/bysamio/postgresql:17.10
+  ghcr.io/bysamio/postgresql:17.12
 ```
 
 ### WordPress
 
 A security-hardened WordPress image that runs as non-root user on port 8080.
 
-- **Image**: `ghcr.io/bysamio/wordpress:7.1.3` (also `latest`)
+- **Image**: `ghcr.io/bysamio/wordpress:7.1.5` (also `latest`)
 - **Documentation**: [wordpress/README.md](wordpress/README.md)
 - **Features**:
   - Non-root execution (UID 1001)

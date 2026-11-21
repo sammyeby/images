@@ -28,7 +28,7 @@ concurrency:
 
 env:
   LOCAL_IMAGE: immich:ci
-  RELEASE_IMAGE: ghcr.io/bysamio/immich:3.3.5-r1-${{ github.run_id }}-${{ github.run_attempt }}
+  RELEASE_IMAGE: ghcr.io/bysamio/immich:3.4.2-r1-${{ github.run_id }}-${{ github.run_attempt }}
 
 jobs:
   verify:
@@ -47,6 +47,8 @@ jobs:
           target: runtime
           platforms: linux/amd64
           pull: true
+          # Refresh Alpine packages in the PostgreSQL test fixture.
+          no-cache-filters: runtime
           load: true
           push: false
           tags: postgresql-immich:local
@@ -58,6 +60,8 @@ jobs:
           target: runtime
           platforms: linux/amd64
           pull: true
+          # Refresh Debian security packages while reusing the source build.
+          no-cache-filters: runtime
           load: true
           push: false
           tags: ${{ env.LOCAL_IMAGE }}

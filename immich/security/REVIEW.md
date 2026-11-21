@@ -1,4 +1,28 @@
-# Pilot risk review — 2026-10-31
+# Pilot risk review — 2026-11-21
+
+The current candidate uses Immich 3.4.2 and PostgreSQL 17.12, retaining the
+existing pilot/runtime restrictions. Local ARM64 full runtime tests pass,
+including the version API, schema generation, compressed login, WebSocket,
+mail rendering, native image processing, original integrity and thumbnails.
+
+The exact final image reports 131 HIGH and 1 CRITICAL occurrences with zero
+fixable HIGH/CRITICAL findings. Full reports retain the vendor-unfixed findings;
+passing that gate is not a zero-vulnerability claim. Native amd64 CI remains
+required for publication. The root [validation record](../../upstream-refresh-validation.json)
+records image IDs, report checksums and local verification scope.
+
+The new upstream release includes FUTO Backups. Its Restic executable is rebuilt
+from the current fork's exact source, with fixed Go/module versions and the
+vendor build flags. Source/module hashes, upstream archiver/command tests and an
+offline restricted backup/restore/integrity test verify that replacement. The
+application's own backup behavior and disabled Restic self-update are retained.
+No new backup provider, credentials or production deployment is configured here.
+
+Review again by **2026-11-28**, before broader media ingestion or enabling new
+integrations. Earlier counts and assessments below are historical 3.3.5 evidence.
+
+## Historical pilot risk review — 2026-10-31
+
 
 Review again by **2026-11-07**, on any new advisory or upstream release, and
 before expanding beyond a small sample. No CVEs are suppressed. The publication

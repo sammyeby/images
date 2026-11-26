@@ -1,4 +1,4 @@
-name: Build BySamio WordPress Image
+name: Build SamSoft Technologies WordPress Image
 
 on:
   push:
@@ -35,7 +35,7 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: bysamio/wordpress
+  IMAGE_NAME: sammyeby/wordpress
   WORDPRESS_VERSION: ${{ github.event.inputs.wordpress_version || '7.1.5' }}
   LOCAL_IMAGE: wordpress:ci
 

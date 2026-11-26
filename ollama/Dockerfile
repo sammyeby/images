@@ -49,7 +49,9 @@ RUN apt-get update && apt-get upgrade -y \
 COPY --from=native /cpu/ /usr/lib/ollama/
 COPY --from=build /out/ollama /usr/bin/ollama
 COPY --from=build /out/GO_LICENSE /usr/lib/ollama/GO_LICENSE
-LABEL org.opencontainers.image.source="https://github.com/bysamio/images" \
+LABEL org.opencontainers.image.source="https://github.com/sammyeby/images" \
+      org.opencontainers.image.title="SamSoft Technologies Ollama CPU" \
+      org.opencontainers.image.vendor="SamSoft Technologies" \
       org.opencontainers.image.version="0.40.16-cpu-r1" \
       io.bysamio.ollama.upstream-commit="d63b702609c4300a2ca07be2bdb0adb9834725e5" \
       io.bysamio.ollama.native-payload="sha256:a372a1c0d1e15b68e9521189785c3ca17795c26c2356f8b1b10122cfb59ed0d7"

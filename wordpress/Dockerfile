@@ -1,9 +1,9 @@
-# BySamio WordPress - Non-root WordPress Docker Image
+# SamSoft Technologies WordPress - Non-root WordPress Docker Image
 # Runs as non-root user (UID 1001) on port 8080
 # Compatible with Kubernetes restricted Pod Security Standards
 #
-# Build: docker build -t ghcr.io/bysamio/wordpress:latest .
-# Run:   docker run -p 8080:8080 ghcr.io/bysamio/wordpress:latest
+# Build: docker build -t ghcr.io/sammyeby/wordpress:latest .
+# Run:   docker run -p 8080:8080 ghcr.io/sammyeby/wordpress:latest
 
 # 7.1.5-apache ships PHP 8.3.37, which fixes PHP2Shell (CVE-2026-109618,
 # CVE-2026-109619; GHSA-w8hw-w9fx-j79w, GHSA-6wmf-4rv5-p3rp): unauthenticated
@@ -12,10 +12,10 @@
 ARG WORDPRESS_VERSION=7.1.5
 FROM wordpress:${WORDPRESS_VERSION}-apache
 
-LABEL org.opencontainers.image.title="BySamio WordPress"
+LABEL org.opencontainers.image.title="SamSoft Technologies WordPress"
 LABEL org.opencontainers.image.description="Non-root WordPress image for Kubernetes"
-LABEL org.opencontainers.image.vendor="BySam.io"
-LABEL org.opencontainers.image.source="https://github.com/bysamio/charts"
+LABEL org.opencontainers.image.vendor="SamSoft Technologies"
+LABEL org.opencontainers.image.source="https://github.com/sammyeby/images"
 LABEL org.opencontainers.image.licenses="MIT"
 
 # Apply Debian security updates released after the upstream tag was built, so a

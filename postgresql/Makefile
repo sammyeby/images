@@ -1,8 +1,8 @@
-# BySamio PostgreSQL - Build and Test Commands
+# SamSoft Technologies PostgreSQL - Build and Test Commands
 # Usage: make <target>
 
 REGISTRY := ghcr.io
-IMAGE_NAME := bysamio/postgresql
+IMAGE_NAME := sammyeby/postgresql
 POSTGRESQL_VERSION := 17.12
 TAG := $(POSTGRESQL_VERSION)
 ALPINE_TAG := $(POSTGRESQL_VERSION)-alpine
@@ -17,7 +17,7 @@ COMPOSE ?= $(CONTAINER_ENGINE) compose
         scan run clean
 
 help: ## Show this help message
-	@echo "BySamio PostgreSQL - Build Commands"
+	@echo "SamSoft Technologies PostgreSQL - Build Commands"
 	@echo ""
 	@echo "Usage: make <target>"
 	@echo ""

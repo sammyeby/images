@@ -1,4 +1,4 @@
-name: Build BySamio PostgreSQL Immich Image
+name: Build SamSoft Technologies PostgreSQL Immich Image
 
 on:
   push:
@@ -28,7 +28,7 @@ concurrency:
 
 env:
   LOCAL_IMAGE: postgresql-immich:ci
-  RELEASE_IMAGE: ghcr.io/bysamio/postgresql-immich:17.12-vchord1.1.1-vector0.8.7-r1-${{ github.run_id }}-${{ github.run_attempt }}
+  RELEASE_IMAGE: ghcr.io/sammyeby/postgresql-immich:17.12-vchord1.1.1-vector0.8.7-r1-${{ github.run_id }}-${{ github.run_attempt }}
 
 jobs:
   verify:

@@ -1,4 +1,4 @@
-# BySam.io Paperless-ngx
+# SamSoft Technologies Paperless-ngx
 
 A small derivative of Paperless-ngx 3.5.1 for the PostgreSQL-based home-server
 archive. This image fixes selected dependencies and applies narrow, source-verified
@@ -26,7 +26,7 @@ publication does not clear it for processing personal documents.
   and reviewed build-time AI patches/token-budget helper.
 - Test real OCR, dependency checks and startup in disposable synthetic storage.
   Capture full image vulnerability evidence and gate publication before pushing.
-- Publish reviewed versions to `ghcr.io/bysamio/paperless-ngx`. Version `3.5.1-r1`
+- Publish reviewed versions to `ghcr.io/sammyeby/paperless-ngx`. Version `3.5.1-r1`
   receives a unique `<version>-<run-id>-<attempt>` tag; no tag is reused and no
   `latest` alias is published. Consumers pin the recorded registry digest.
 
@@ -81,7 +81,7 @@ directory and the upstream rootless mode:
 
 ```yaml
 webserver:
-  image: ghcr.io/bysamio/paperless-ngx@sha256:<verified-published-digest>
+  image: ghcr.io/sammyeby/paperless-ngx@sha256:<verified-published-digest>
   user: "1000:1000" # substitute the owner of your application bind mounts
   cap_drop: [ALL]
   security_opt: ["no-new-privileges:true"]

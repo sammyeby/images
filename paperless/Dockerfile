@@ -3,10 +3,11 @@ FROM ghcr.io/paperless-ngx/paperless-ngx:3.5.1@sha256:8508853b8a0f8394074260957d
 
 USER 0:0
 ARG DEBIAN_FRONTEND=noninteractive
-LABEL org.opencontainers.image.source="https://github.com/bysamio/images" \
-      org.opencontainers.image.documentation="https://github.com/bysamio/images/tree/main/paperless" \
+LABEL org.opencontainers.image.source="https://github.com/sammyeby/images" \
+      org.opencontainers.image.documentation="https://github.com/sammyeby/images/tree/main/paperless" \
       org.opencontainers.image.version="3.5.1-r1" \
-      org.opencontainers.image.title="BySam.io Paperless-ngx" \
+      org.opencontainers.image.title="SamSoft Technologies Paperless-ngx" \
+      org.opencontainers.image.vendor="SamSoft Technologies" \
       org.opencontainers.image.licenses="GPL-3.0-only"
 
 COPY requirements-patches.txt /tmp/bysamio-requirements-patches.txt

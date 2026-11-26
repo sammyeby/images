@@ -1,4 +1,4 @@
-# BySamio Keycloak
+# SamSoft Technologies Keycloak
 
 Security-hardened Keycloak Docker images for Kubernetes environments with runtime provider support.
 
@@ -55,7 +55,7 @@ docker run -d \
   -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
   -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin \
   -e KC_DB=dev-mem \
-  ghcr.io/bysamio/keycloak:26.8.2
+  ghcr.io/sammyeby/keycloak:26.8.2
 
 # Access admin console at http://localhost:8080/admin
 ```
@@ -205,7 +205,7 @@ spec:
 
       containers:
         - name: keycloak
-          image: ghcr.io/bysamio/keycloak:26.8.2
+          image: ghcr.io/sammyeby/keycloak:26.8.2
           env:
             - name: KC_DB
               value: postgres
@@ -234,7 +234,7 @@ Docker Compose example:
 ```yaml
 services:
   keycloak:
-    image: ghcr.io/bysamio/keycloak:26.8.2
+    image: ghcr.io/sammyeby/keycloak:26.8.2
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
@@ -268,7 +268,7 @@ volumes:
 # Docker
 docker run -d \
   -v ./my-theme:/opt/keycloak/themes/my-theme:ro \
-  ghcr.io/bysamio/keycloak:26.8.2
+  ghcr.io/sammyeby/keycloak:26.8.2
 ```
 
 ### Method 3: Build Custom Image (For Stable Providers)
@@ -277,11 +277,11 @@ If your providers rarely change, build them into the image:
 
 ```dockerfile
 # For optimized (distroless, build-time providers)
-FROM ghcr.io/bysamio/keycloak:26.8.2-optimized AS builder
+FROM ghcr.io/sammyeby/keycloak:26.8.2-optimized AS builder
 # ... add providers to builder stage, then rebuild (providers are baked in)
 
 # For default variant (runtime auto-build)
-FROM ghcr.io/bysamio/keycloak:26.8.2
+FROM ghcr.io/sammyeby/keycloak:26.8.2
 
 # Copy providers - will auto-build on first start (default variant only)
 COPY --chown=1001:1001 my-provider.jar /opt/keycloak/providers/
@@ -303,7 +303,7 @@ COPY --chown=1001:1001 my-theme/ /opt/keycloak/themes/my-theme/
 
 ```bash
 # Via environment variable (both variants)
-docker run -e KC_SPI_THEME_DEFAULT=my-theme ghcr.io/bysamio/keycloak:26.8.2
+docker run -e KC_SPI_THEME_DEFAULT=my-theme ghcr.io/sammyeby/keycloak:26.8.2
 ```
 
 ## Helm Deployment
@@ -311,16 +311,16 @@ docker run -e KC_SPI_THEME_DEFAULT=my-theme ghcr.io/bysamio/keycloak:26.8.2
 ### Default Variant (Runtime Provider Support)
 
 ```bash
-helm install keycloak oci://ghcr.io/bysamio/charts/keycloak \
+helm install keycloak oci://ghcr.io/sammyeby/charts/keycloak \
   --set image.registry=ghcr.io \
-  --set image.repository=bysamio/keycloak \
+  --set image.repository=sammyeby/keycloak \
   --set image.tag=26.8.2
 ```
 
 ```yaml
 image:
   registry: ghcr.io
-  repository: bysamio/keycloak
+  repository: sammyeby/keycloak
   tag: "26.8.2"
 
 # Security context for default variant (UID 1001)
@@ -356,9 +356,9 @@ extraVolumes:
 ### Optimized Variant (Maximum Security)
 
 ```bash
-helm install keycloak oci://ghcr.io/bysamio/charts/keycloak \
+helm install keycloak oci://ghcr.io/sammyeby/charts/keycloak \
   --set image.registry=ghcr.io \
-  --set image.repository=bysamio/keycloak \
+  --set image.repository=sammyeby/keycloak \
   --set image.tag=26.8.2-optimized \
   --set containerSecurityContext.runAsUser=65532
 ```
@@ -366,7 +366,7 @@ helm install keycloak oci://ghcr.io/bysamio/charts/keycloak \
 ```yaml
 image:
   registry: ghcr.io
-  repository: bysamio/keycloak
+  repository: sammyeby/keycloak
   tag: "26.8.2-optimized"
 
 # Security context for optimized/distroless (UID 65532)
@@ -424,7 +424,7 @@ For troubleshooting, use the debug variant which includes a busybox shell:
 
 ```bash
 # Run debug variant
-docker run -it ghcr.io/bysamio/keycloak:26.8.2-debug
+docker run -it ghcr.io/sammyeby/keycloak:26.8.2-debug
 
 # Exec into running container
 docker exec -it <container> /busybox/sh
@@ -496,8 +496,8 @@ Expected CVE count: **0-10** (distroless base with only JRE)
 
 | Image | Base | CVEs | Shell | Runtime Providers | Size |
 |-------|------|------|-------|-------------------|------|
-| **BySamio Default** | Alpine | 15-30 | Yes | Yes | ~250MB |
-| **BySamio Optimized** | Distroless | 0-10 | No | No | ~200MB |
+| **SamSoft Technologies Default** | Alpine | 15-30 | Yes | Yes | ~250MB |
+| **SamSoft Technologies Optimized** | Distroless | 0-10 | No | No | ~200MB |
 | Official Keycloak | UBI | 50-200 | Yes | Yes | ~450MB |
 | Bitnami Keycloak | Debian | 30-100 | Yes | Yes | ~400MB |
 
@@ -518,7 +518,7 @@ This image is provided under the Apache 2.0 License, consistent with Keycloak's 
 
 ## Links
 
-- [BySamio Images Repository](https://github.com/bysamio/images)
+- [SamSoft Technologies Images Repository](https://github.com/sammyeby/images)
 - [Keycloak Documentation](https://www.keycloak.org/documentation)
 - [Keycloak Server Configuration](https://www.keycloak.org/server/all-config)
 - [Google Distroless](https://github.com/GoogleContainerTools/distroless)

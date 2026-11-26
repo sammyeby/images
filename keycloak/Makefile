@@ -1,8 +1,8 @@
-# BySamio Keycloak - Build and Test Commands
+# SamSoft Technologies Keycloak - Build and Test Commands
 # Usage: make <target>
 
 REGISTRY := ghcr.io
-IMAGE_NAME := bysamio/keycloak
+IMAGE_NAME := sammyeby/keycloak
 KEYCLOAK_VERSION := 26.8.2
 TAG := $(KEYCLOAK_VERSION)
 # Default image (flexible, runtime provider support)
@@ -26,7 +26,7 @@ HELM_NAMESPACE := keycloak
         scan run run-db run-optimized minikube-load minikube-test minikube-clean clean
 
 help: ## Show this help message
-	@echo "BySamio Keycloak - Build Commands"
+	@echo "SamSoft Technologies Keycloak - Build Commands"
 	@echo ""
 	@echo "Usage: make <target>"
 	@echo ""
@@ -345,7 +345,7 @@ minikube-deploy: minikube-load ## Deploy Keycloak to minikube using test values
 	@echo "Deploying Keycloak to minikube..."
 	@echo "----------------------------------------"
 	kubectl create namespace $(HELM_NAMESPACE) --dry-run=client -o yaml | kubectl apply -f -
-	helm upgrade --install $(HELM_RELEASE) oci://ghcr.io/bysamio/charts/keycloak \
+	helm upgrade --install $(HELM_RELEASE) oci://ghcr.io/sammyeby/charts/keycloak \
 		--namespace $(HELM_NAMESPACE) \
 		-f test/minikube-values.yaml \
 		--set image.registry="" \

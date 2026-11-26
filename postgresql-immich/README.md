@@ -1,7 +1,7 @@
 # PostgreSQL for Immich
 
 Dedicated PostgreSQL **17.12 / VectorChord 1.1.1 / pgvector 0.8.7** image for
-the private home-server photo pilot. This does not replace `bysamio/postgresql`
+the private home-server photo pilot. This does not replace `sammyeby/postgresql`
 or change Paperless. PostgreSQL 17 has support through 2029; the pilot has no
 existing database to migrate from PostgreSQL 14.
 

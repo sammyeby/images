@@ -1,4 +1,4 @@
-name: Build BySamio PostgreSQL Image
+name: Build SamSoft Technologies PostgreSQL Image
 
 on:
   push:
@@ -27,7 +27,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: bysamio/postgresql
+  IMAGE_NAME: sammyeby/postgresql
   POSTGRESQL_VERSION: ${{ github.event.inputs.postgresql_version || '17.12' }}
 
 jobs:

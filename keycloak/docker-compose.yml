@@ -1,4 +1,4 @@
-# BySamio Keycloak - Local Development with PostgreSQL
+# SamSoft Technologies Keycloak - Local Development with PostgreSQL
 # Usage: docker compose up
 #
 # This configuration runs Keycloak with PostgreSQL for local development.
@@ -13,7 +13,7 @@ services:
       target: default
       args:
         KEYCLOAK_VERSION: "26.8.2"
-    image: ghcr.io/bysamio/keycloak:local
+    image: ghcr.io/sammyeby/keycloak:local
     container_name: bysamio-keycloak
     ports:
       - "8080:8080"    # HTTP
@@ -64,7 +64,7 @@ services:
       target: runtime
       args:
         POSTGRESQL_VERSION: "17.12"
-    image: ghcr.io/bysamio/postgresql:local
+    image: ghcr.io/sammyeby/postgresql:local
     container_name: bysamio-keycloak-db
     environment:
       POSTGRES_DB: keycloak
@@ -95,7 +95,7 @@ services:
       target: debug
       args:
         KEYCLOAK_VERSION: "26.8.2"
-    image: ghcr.io/bysamio/keycloak:debug
+    image: ghcr.io/sammyeby/keycloak:debug
     container_name: bysamio-keycloak-debug
     profiles:
       - debug

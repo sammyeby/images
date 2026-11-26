@@ -1,4 +1,4 @@
-# BySamio WordPress
+# SamSoft Technologies WordPress
 
 A security-hardened WordPress Docker image designed for Kubernetes environments.
 
@@ -21,7 +21,7 @@ docker run -d \
   -e WORDPRESS_DB_USER=wordpress \
   -e WORDPRESS_DB_PASSWORD=secret \
   -e WORDPRESS_DB_NAME=wordpress \
-  ghcr.io/bysamio/wordpress:latest
+  ghcr.io/sammyeby/wordpress:latest
 ```
 
 ### Docker Compose
@@ -30,7 +30,7 @@ docker run -d \
 version: '3.8'
 services:
   wordpress:
-    image: ghcr.io/bysamio/wordpress:latest
+    image: ghcr.io/sammyeby/wordpress:latest
     ports:
       - "8080:8080"
     environment:
@@ -58,10 +58,10 @@ volumes:
   db_data:
 ```
 
-### Kubernetes (with BySamio Helm Chart)
+### Kubernetes (with SamSoft Technologies Helm Chart)
 
 ```bash
-helm install my-wordpress oci://ghcr.io/bysamio/charts/wordpress
+helm install my-wordpress oci://ghcr.io/sammyeby/charts/wordpress
 ```
 
 ## Environment Variables
@@ -134,13 +134,13 @@ securityContext:
 
 ```bash
 cd wordpress
-docker build -t ghcr.io/bysamio/wordpress:latest .
+docker build -t ghcr.io/sammyeby/wordpress:latest .
 ```
 
 ### Build with specific WordPress version
 
 ```bash
-docker build --build-arg WORDPRESS_VERSION=7.1.5 -t ghcr.io/bysamio/wordpress:7.1.5 .
+docker build --build-arg WORDPRESS_VERSION=7.1.5 -t ghcr.io/sammyeby/wordpress:7.1.5 .
 ```
 
 ### Multi-platform Build
@@ -148,7 +148,7 @@ docker build --build-arg WORDPRESS_VERSION=7.1.5 -t ghcr.io/bysamio/wordpress:7.
 ```bash
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
-  -t ghcr.io/bysamio/wordpress:latest \
+  -t ghcr.io/sammyeby/wordpress:latest \
   --push .
 ```
 
@@ -232,7 +232,7 @@ run as the file owner, UID 1001. Back up the database and volume first.
 
 ## Differences from Official WordPress Image
 
-| Feature | Official Image | BySamio Image |
+| Feature | Official Image | SamSoft Technologies Image |
 |---------|---------------|---------------|
 | Default user | root (UID 0) | bysamio (UID 1001) |
 | Default port | 80 | 8080 |
@@ -285,6 +285,6 @@ MIT License - See [LICENSE](../LICENSE) for details.
 
 ## Links
 
-- [BySamio Helm Charts](https://github.com/bysamio/charts)
+- [SamSoft Technologies Helm Charts](https://github.com/sammyeby/charts)
 - [Official WordPress Image](https://hub.docker.com/_/wordpress)
 - [Kubernetes Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/)

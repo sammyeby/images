@@ -23,8 +23,9 @@ RUN cargo fetch --locked && sha256sum Cargo.lock > /tmp/cargo-lock.sha256 && \
 
 FROM ${POSTGRES_BASE} AS runtime
 USER root
-LABEL org.opencontainers.image.title="BySamio PostgreSQL for Immich" \
-    org.opencontainers.image.source="https://github.com/bysamio/images" \
+LABEL org.opencontainers.image.title="SamSoft Technologies PostgreSQL for Immich" \
+    org.opencontainers.image.vendor="SamSoft Technologies" \
+    org.opencontainers.image.source="https://github.com/sammyeby/images" \
     org.opencontainers.image.version="17.12-vchord1.1.1-vector0.8.7-r1" \
     org.opencontainers.image.licenses="PostgreSQL AND Apache-2.0 AND AGPL-3.0-only"
 RUN apk upgrade --no-cache && apk add --no-cache libgcc libstdc++ && \

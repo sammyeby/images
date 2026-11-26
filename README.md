@@ -1,19 +1,20 @@
-# BySam.io Docker Images
+# SamSoft Technologies Docker Images
 
-A collection of security-hardened Docker images by the **BySam.io Organization**. These custom images are based on official images (WordPress, Keycloak, etc.) and are optimized for Kubernetes environments with enhanced security features.
+A collection of security-hardened Docker images maintained by **SamSoft Technologies**, a small business based in Germany. These custom images are based on official upstream images and are optimized for Kubernetes environments with enhanced security features.
 
 ## Purpose
 
 This repository contains custom Docker images designed to:
 
-- **Helm Charts**: Used as the default images in [BySam.io Helm Charts](https://github.com/bysamio/charts)
+- **Helm Charts**: Used as the default images in [SamSoft Technologies Helm Charts](https://github.com/sammyeby/charts)
 - **Standalone Use**: Can be used directly in Docker, Docker Compose, or Kubernetes deployments
 - **Security Hardened**: Optimized for Kubernetes Pod Security Standards (restricted mode)
 - **Production Ready**: Tested and maintained for production workloads
 
-The [upstream refresh validation](upstream-refresh-validation.json) records the
-current local build/runtime results, exact candidate image IDs and full-scan
-counts. Native CI separately verifies release artifacts before publication.
+The [upstream refresh validation](upstream-refresh-validation.json) records
+build/runtime results and full-scan counts for the exact candidate image IDs
+listed there. Rebranding changes image digests; native CI verifies rebuilt
+release artifacts before publication.
 
 ## Available Images
 
@@ -52,7 +53,7 @@ complete scan findings, update procedure and native coverage limits.
 
 Security-hardened Keycloak images with a flexible Alpine default and an optimized distroless variant.
 
-- **Image**: `ghcr.io/bysamio/keycloak:26.8.2`
+- **Image**: `ghcr.io/sammyeby/keycloak:26.8.2`
 - **Documentation**: [keycloak/README.md](keycloak/README.md)
 - **Features**:
   - Runtime provider/SPI support in the default image
@@ -70,14 +71,14 @@ docker run -d \
   -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
   -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin \
   -e KC_DB=dev-mem \
-  ghcr.io/bysamio/keycloak:26.8.2
+  ghcr.io/sammyeby/keycloak:26.8.2
 ```
 
 ### PostgreSQL
 
 A security-hardened PostgreSQL image with minimal CVEs, built on Alpine Linux.
 
-- **Image**: `ghcr.io/bysamio/postgresql:17.12` or `ghcr.io/bysamio/postgresql:17.12-alpine`
+- **Image**: `ghcr.io/sammyeby/postgresql:17.12` or `ghcr.io/sammyeby/postgresql:17.12-alpine`
 - **Documentation**: [postgresql/README.md](postgresql/README.md)
 - **Features**:
   - Minimal CVEs (Alpine base)
@@ -94,14 +95,14 @@ docker run -d \
   -e POSTGRES_PASSWORD=secretpassword \
   -e POSTGRES_USER=postgres \
   -e POSTGRES_DB=postgres \
-  ghcr.io/bysamio/postgresql:17.12
+  ghcr.io/sammyeby/postgresql:17.12
 ```
 
 ### WordPress
 
 A security-hardened WordPress image that runs as non-root user on port 8080.
 
-- **Image**: `ghcr.io/bysamio/wordpress:7.1.5` (also `latest`)
+- **Image**: `ghcr.io/sammyeby/wordpress:7.1.5` (also `latest`)
 - **Documentation**: [wordpress/README.md](wordpress/README.md)
 - **Features**:
   - Non-root execution (UID 1001)
@@ -118,14 +119,14 @@ docker run -d \
   -e WORDPRESS_DB_USER=wordpress \
   -e WORDPRESS_DB_PASSWORD=secret \
   -e WORDPRESS_DB_NAME=wordpress \
-  ghcr.io/bysamio/wordpress:latest
+  ghcr.io/sammyeby/wordpress:latest
 ```
 
 ### Paperless-ngx
 
-A dependency patch image for Paperless-ngx 3.3.0, initially targeting Linux AMD64.
+A dependency patch image for Paperless-ngx 3.5.1, initially targeting Linux AMD64.
 
-- **Image**: `ghcr.io/bysamio/paperless-ngx` (unique version tags; consume by digest)
+- **Image**: `ghcr.io/sammyeby/paperless-ngx` (unique version tags; consume by digest)
 - **Documentation**: [paperless/README.md](paperless/README.md)
 - **Features**: pinned upstream base, Debian Ghostscript security backports,
   hashed fsspec patch, removal of unused vulnerable pip tooling, and UID/GID 1000.
@@ -137,17 +138,37 @@ A dependency patch image for Paperless-ngx 3.3.0, initially targeting Linux AMD6
 
 ## Image Registry
 
-All images are published to **GitHub Container Registry (GHCR)**:
+Release workflows publish approved images to **GitHub Container Registry (GHCR)**:
 
-- **Registry**: `ghcr.io/bysamio/<image-name>`
-- **Organization**: [BySam.io](https://github.com/bysamio)
+- **Registry**: `ghcr.io/sammyeby/<image-name>`
+- **Maintainer**: [SamSoft Technologies](https://github.com/sammyeby)
+
+Versioned image examples in this repository describe the build targets in this
+checkout. Tags become available after release gates pass and publication
+completes. For the images selected by released charts, see the
+[chart defaults](https://github.com/sammyeby/charts#available-charts-and-default-images).
+
+### Migration from BySam.io
+
+SamSoft Technologies publishes new images under `ghcr.io/sammyeby/<image-name>`
+and maintains the source at [sammyeby/images](https://github.com/sammyeby/images).
+Update image references from `ghcr.io/bysamio/` to `ghcr.io/sammyeby/` after
+verifying the required tag or digest is available in the new registry. Existing
+digest pins must be checked against the destination image before use.
+
+Runtime identifiers such as the WordPress `bysamio` user, `BYSAMIO_UID` and
+`BYSAMIO_GID`, entrypoint paths, `/usr/share/bysamio` audit files and custom
+`io.bysamio.*` labels are retained for compatibility. Numeric UIDs/GIDs, ports
+and data paths keep their existing contracts.
 
 ## Using with Helm Charts
 
-These images are the default images in the [BySam.io Helm Charts](https://github.com/bysamio/charts) repository:
+The Keycloak, PostgreSQL and WordPress images are used by the
+[SamSoft Technologies Helm Charts](https://github.com/sammyeby/charts). Each chart
+pins its published image version independently of this repository's build targets.
 
 ```bash
-helm install my-wordpress oci://ghcr.io/bysamio/charts/wordpress
+helm install my-wordpress oci://ghcr.io/sammyeby/charts/wordpress
 ```
 
 The Helm charts are pre-configured to use these images with appropriate security contexts and settings.
@@ -163,15 +184,15 @@ The Makefiles use Docker by default. To use Podman instead, prefix any Make targ
 ```bash
 # WordPress
 cd wordpress
-docker build -t ghcr.io/bysamio/wordpress:latest .
+docker build -t ghcr.io/sammyeby/wordpress:latest .
 
 # Keycloak
 cd keycloak
-make build-local  # or: docker build -t ghcr.io/bysamio/keycloak:latest .
+make build-local  # or: docker build -t ghcr.io/sammyeby/keycloak:latest .
 
 # PostgreSQL
 cd postgresql
-make build-local  # or: docker build -t ghcr.io/bysamio/postgresql:latest .
+make build-local  # or: docker build -t ghcr.io/sammyeby/postgresql:latest .
 ```
 
 ### Testing Images
@@ -237,9 +258,9 @@ All images in this repository are designed with security best practices:
 
 ## Links
 
-- [BySam.io Organization](https://github.com/bysamio)
-- [BySam.io Helm Charts](https://github.com/bysamio/charts)
-- [GitHub Container Registry](https://github.com/bysamio?tab=packages)
+- [SamSoft Technologies](https://github.com/sammyeby)
+- [SamSoft Technologies Helm Charts](https://github.com/sammyeby/charts)
+- [GitHub Container Registry](https://github.com/sammyeby?tab=packages)
 
 ## License
 

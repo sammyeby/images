@@ -7,6 +7,9 @@ COPY verify_environment.py /tmp/verify_environment.py
 RUN uv pip install --python /opt/venv/bin/python --no-deps --no-build --require-hashes --no-cache -r /tmp/patches.lock && /opt/venv/bin/python /tmp/verify_environment.py
 
 FROM ${UPSTREAM} AS runtime
+LABEL org.opencontainers.image.title="SamSoft Technologies Immich Machine Learning" \
+    org.opencontainers.image.vendor="SamSoft Technologies" \
+    org.opencontainers.image.source="https://github.com/sammyeby/images"
 # Refresh the pinned Debian filesystem: CVE-2026-109518 (apt) and
 # CVE-2026-76844 / CVE-2026-85091 (zlib) have Trixie security backports.
 RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*

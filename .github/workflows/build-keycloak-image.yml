@@ -1,4 +1,4 @@
-name: Build BySamio Keycloak Image
+name: Build SamSoft Technologies Keycloak Image
 
 on:
   push:
@@ -32,7 +32,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: bysamio/keycloak
+  IMAGE_NAME: sammyeby/keycloak
   KEYCLOAK_VERSION: ${{ github.event.inputs.keycloak_version || '26.8.2' }}
 
 jobs:

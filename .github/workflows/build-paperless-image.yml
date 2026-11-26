@@ -1,4 +1,4 @@
-name: Build BySamio Paperless Image
+name: Build SamSoft Technologies Paperless Image
 
 on:
   push:
@@ -28,7 +28,7 @@ concurrency:
 
 env:
   LOCAL_IMAGE: paperless:ci
-  RELEASE_IMAGE: ghcr.io/bysamio/paperless-ngx:3.5.1-r1-${{ github.run_id }}-${{ github.run_attempt }}
+  RELEASE_IMAGE: ghcr.io/sammyeby/paperless-ngx:3.5.1-r1-${{ github.run_id }}-${{ github.run_attempt }}
 
 jobs:
   verify:

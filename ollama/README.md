@@ -1,6 +1,6 @@
 # Ollama CPU image
 
-Prepare `ghcr.io/bysamio/ollama:0.40.16-cpu-r1-<run>-<attempt>` for the home-server's
+Prepare `ghcr.io/sammyeby/ollama:0.40.16-cpu-r1-<run>-<attempt>` for the home-server's
 local generation and embeddings. The image is not published or approved yet.
 
 The reviewed contract is Linux/amd64 CPU inference, Ollama's existing API,

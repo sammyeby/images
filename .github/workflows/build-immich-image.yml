@@ -1,4 +1,4 @@
-name: Build BySamio Immich Image
+name: Build SamSoft Technologies Immich Image
 
 on:
   push:
@@ -28,7 +28,7 @@ concurrency:
 
 env:
   LOCAL_IMAGE: immich:ci
-  RELEASE_IMAGE: ghcr.io/bysamio/immich:3.4.2-r1-${{ github.run_id }}-${{ github.run_attempt }}
+  RELEASE_IMAGE: ghcr.io/sammyeby/immich:3.4.2-r1-${{ github.run_id }}-${{ github.run_attempt }}
 
 jobs:
   verify:

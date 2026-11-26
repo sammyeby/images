@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-# BySamio WordPress Entrypoint
+# SamSoft Technologies WordPress Entrypoint
 # This script wraps the official WordPress entrypoint for non-root execution
 
-echo "BySamio WordPress - Starting as non-root user (UID: $(id -u))"
+echo "SamSoft Technologies WordPress - Starting as non-root user (UID: $(id -u))"
 
 # Verify we're running as non-root
 if [ "$(id -u)" = "0" ]; then

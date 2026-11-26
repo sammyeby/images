@@ -1,15 +1,15 @@
-# BySamio Keycloak - Security-Hardened Images
+# SamSoft Technologies Keycloak - Security-Hardened Images
 # Provides multiple variants for different use cases:
 #   - default (alpine): Runtime provider/SPI loading, init container support
 #   - optimized (distroless): Maximum security, near-zero CVEs, fast startup
 #   - debug (distroless-debug): Troubleshooting with shell access
 #
 # Build variants:
-#   docker build --target default -t ghcr.io/bysamio/keycloak:26.8.2 .
-#   docker build --target optimized -t ghcr.io/bysamio/keycloak:26.8.2-optimized .
+#   docker build --target default -t ghcr.io/sammyeby/keycloak:26.8.2 .
+#   docker build --target optimized -t ghcr.io/sammyeby/keycloak:26.8.2-optimized .
 #
 # Run:
-#   docker run -p 8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin ghcr.io/bysamio/keycloak:latest
+#   docker run -p 8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin ghcr.io/sammyeby/keycloak:latest
 
 ARG KEYCLOAK_VERSION=26.8.2
 ARG GUAVA_PATCH_VERSION=33.7.2-jre
@@ -63,10 +63,10 @@ RUN /opt/keycloak/bin/kc.sh build \
 # =============================================================================
 FROM gcr.io/distroless/java21-debian13:nonroot AS optimized
 
-LABEL org.opencontainers.image.title="BySamio Keycloak (Optimized)"
+LABEL org.opencontainers.image.title="SamSoft Technologies Keycloak (Optimized)"
 LABEL org.opencontainers.image.description="Optimized Keycloak with near-zero CVEs, config locked at build time"
-LABEL org.opencontainers.image.vendor="BySam.io"
-LABEL org.opencontainers.image.source="https://github.com/bysamio/images"
+LABEL org.opencontainers.image.vendor="SamSoft Technologies"
+LABEL org.opencontainers.image.source="https://github.com/sammyeby/images"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 LABEL org.opencontainers.image.base.name="gcr.io/distroless/java21-debian13:nonroot"
 
@@ -121,9 +121,10 @@ CMD ["start", "--optimized"]
 # =============================================================================
 FROM gcr.io/distroless/java21-debian13:debug-nonroot AS debug
 
-LABEL org.opencontainers.image.title="BySamio Keycloak (Debug)"
+LABEL org.opencontainers.image.title="SamSoft Technologies Keycloak (Debug)"
 LABEL org.opencontainers.image.description="Debug variant with shell access for troubleshooting"
-LABEL org.opencontainers.image.vendor="BySam.io"
+LABEL org.opencontainers.image.vendor="SamSoft Technologies"
+LABEL org.opencontainers.image.source="https://github.com/sammyeby/images"
 
 COPY --from=optimized-builder --chown=65532:65532 /opt/keycloak /opt/keycloak
 
@@ -182,10 +183,10 @@ WORKDIR /opt/keycloak
 # =============================================================================
 FROM eclipse-temurin:21-jre-alpine AS default
 
-LABEL org.opencontainers.image.title="BySamio Keycloak"
+LABEL org.opencontainers.image.title="SamSoft Technologies Keycloak"
 LABEL org.opencontainers.image.description="Keycloak with runtime provider support and auto-build"
-LABEL org.opencontainers.image.vendor="BySam.io"
-LABEL org.opencontainers.image.source="https://github.com/bysamio/images"
+LABEL org.opencontainers.image.vendor="SamSoft Technologies"
+LABEL org.opencontainers.image.source="https://github.com/sammyeby/images"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 LABEL org.opencontainers.image.base.name="eclipse-temurin:21-jre-alpine"
 

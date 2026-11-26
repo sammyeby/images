@@ -59,8 +59,9 @@ RUN mkdir -p /output/audits && \
 
 FROM ghcr.io/immich-app/immich-server:v3.4.2@sha256:fc880c1bf665b4aab1e74c15e56ab871225989cd546536e6b77e771869af06bd AS runtime
 USER root
-LABEL org.opencontainers.image.title="BySamio Immich" \
-    org.opencontainers.image.source="https://github.com/bysamio/images" \
+LABEL org.opencontainers.image.title="SamSoft Technologies Immich" \
+    org.opencontainers.image.vendor="SamSoft Technologies" \
+    org.opencontainers.image.source="https://github.com/sammyeby/images" \
     org.opencontainers.image.version="3.4.2-r1" \
     org.opencontainers.image.licenses="AGPL-3.0-only"
 # CVE-2026-111497: native image decoders use Debian Brotli, distinct from Node's

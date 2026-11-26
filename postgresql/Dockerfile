@@ -1,8 +1,8 @@
-# BySamio PostgreSQL - Security-Hardened Alpine Image
+# SamSoft Technologies PostgreSQL - Security-Hardened Alpine Image
 # Near-zero vulnerability PostgreSQL image based on official PostgreSQL Alpine
 #
-# Build: docker build -t ghcr.io/bysamio/postgresql:latest .
-# Run:   docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret ghcr.io/bysamio/postgresql:latest
+# Build: docker build -t ghcr.io/sammyeby/postgresql:latest .
+# Run:   docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret ghcr.io/sammyeby/postgresql:latest
 
 ARG POSTGRESQL_VERSION=17.12
 
@@ -26,10 +26,10 @@ RUN apk update && \
 # =============================================================================
 FROM postgres:${POSTGRESQL_VERSION}-alpine AS runtime
 
-LABEL org.opencontainers.image.title="BySamio PostgreSQL"
+LABEL org.opencontainers.image.title="SamSoft Technologies PostgreSQL"
 LABEL org.opencontainers.image.description="Security-hardened PostgreSQL image with near-zero vulnerabilities"
-LABEL org.opencontainers.image.vendor="BySam.io"
-LABEL org.opencontainers.image.source="https://github.com/bysamio/images"
+LABEL org.opencontainers.image.vendor="SamSoft Technologies"
+LABEL org.opencontainers.image.source="https://github.com/sammyeby/images"
 LABEL org.opencontainers.image.licenses="PostgreSQL"
 LABEL org.opencontainers.image.base.name="postgres:${POSTGRESQL_VERSION}-alpine"
 
@@ -44,7 +44,7 @@ RUN apk update && \
 RUN rm -f /usr/local/bin/gosu
 
 # Create bysamio user with UID 1001 (matching Helm chart expectations)
-# The official postgres image uses UID 70, but BysamIO charts expect 1001
+# The official postgres image uses UID 70, but SamSoft Technologies charts expect 1001
 RUN deluser postgres 2>/dev/null || true && \
     addgroup -g 1001 -S postgres && \
     adduser -u 1001 -S -D -G postgres -H -h /var/lib/postgresql -s /bin/sh postgres && \

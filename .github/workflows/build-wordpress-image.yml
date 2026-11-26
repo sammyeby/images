@@ -1,4 +1,4 @@
-name: Build BySamio WordPress Image
+name: Build SamSoft Technologies WordPress Image
 
 on:
   push:
@@ -15,7 +15,7 @@ on:
       wordpress_version:
         description: 'WordPress version to build'
         required: false
-        default: '7.1.3'
+        default: '7.1.5'
       push_image:
         description: 'Push image to registry'
         required: false
@@ -35,8 +35,8 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: bysamio/wordpress
-  WORDPRESS_VERSION: ${{ github.event.inputs.wordpress_version || '7.1.3' }}
+  IMAGE_NAME: sammyeby/wordpress
+  WORDPRESS_VERSION: ${{ github.event.inputs.wordpress_version || '7.1.5' }}
   LOCAL_IMAGE: wordpress:ci
 
 jobs:

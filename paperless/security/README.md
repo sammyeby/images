@@ -1,4 +1,26 @@
-# Paperless patch and outstanding findings
+# Paperless 3.5.1 security refresh
+
+Updated 21 November 2026; review again by 28 November 2026.
+
+The Dockerfile pins official 3.5.1 by multi-platform digest. All installed Debian
+Trixie packages receive available security updates, rather than retaining old
+exact-version upgrades for a subset of parsers. The upstream Python environment
+already includes most previous fixes; only NLTK 3.10.4 and OAuthlib 4.0.1 need
+reviewed, hash-pinned wheel overlays. `uv pip check --system` verifies their
+compatibility. The unused pip installer/bootstrap wheel remain removed.
+
+Upstream now includes the single-retrieval chat correction. The derivative
+retains only its source-hash-verified complete prompt-budget correction and
+pinned public tokenizer. AI permission/retrieval/classification tests, real
+German/English OCR, PDF/A generation and restricted startup for default, explicit
+and custom UIDs pass. The publication gate and full scan/SBOM retention are
+unchanged; native amd64 CI verifies the release artifact.
+
+The records below are historical baselines for 3.3.2 and earlier, not scan or
+acceptance results for 3.5.1. Existing deployment restrictions still apply.
+
+## Historical patch and outstanding findings
+
 
 Updated 16 October 2026; next vendor/applicability review due 18 October 2026.
 

@@ -14,6 +14,19 @@ cleanup() {
 }
 trap cleanup EXIT HUP INT TERM
 test "$("$engine" run --rm --entrypoint id "$image" -u)" = 1000
+"$engine" run --rm --network none --read-only --cap-drop ALL \
+  --security-opt no-new-privileges --tmpfs /tmp:rw,nosuid,nodev,size=64m,mode=1777 \
+  --entrypoint sh "$image" -ec '
+    export RESTIC_PASSWORD=disposable-backup-test RESTIC_REPOSITORY=/tmp/repository RESTIC_CACHE_DIR=/tmp/cache
+    mkdir /tmp/input
+    printf "synthetic Immich backup\n" > /tmp/input/fixture
+    restic init --quiet
+    restic backup /tmp/input --quiet
+    restic restore latest --target /tmp/restored --quiet
+    cmp /tmp/input/fixture /tmp/restored/tmp/input/fixture
+    restic check --read-data --quiet
+  '
+echo 'PASS: FUTO Restic backup, restore, content integrity and repository check offline'
 "$engine" network create --internal "$name" >/dev/null
 "$engine" volume create "$name-media" >/dev/null
 "$engine" volume create "$name-db" >/dev/null

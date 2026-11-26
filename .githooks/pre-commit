@@ -1,5 +1,5 @@
 #!/bin/bash
-# BySamio Images - Pre-commit Hook
+# SamSoft Technologies Images - Pre-commit Hook
 # Tests changed images before allowing commit
 #
 # Install: git config core.hooksPath .githooks
@@ -8,7 +8,7 @@
 set -e
 
 echo "========================================"
-echo "BySamio Images - Pre-commit Hook"
+echo "SamSoft Technologies Images - Pre-commit Hook"
 echo "========================================"
 
 detect_container_engine() {

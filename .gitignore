@@ -4,11 +4,11 @@
 .cursor/*
 .DS_Store
 
-# Keycloak Helm chart files (for bysamio/charts repo)
+# Keycloak Helm chart files (for sammyeby/charts repo)
 keycloak/values.yaml
 keycloak/test/
 
-# PostgreSQL Helm chart files (for bysamio/charts repo)
+# PostgreSQL Helm chart files (for sammyeby/charts repo)
 postgresql/values.yaml
 postgresql/test/
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# BySamio Keycloak - Flexible Variant Entrypoint
+# SamSoft Technologies Keycloak - Flexible Variant Entrypoint
 # Supports runtime provider loading and auto-build
 #
 # Features:
@@ -17,7 +17,7 @@ BUILD_MARKER="${KC_HOME}/data/.build-marker"
 PROVIDERS_DIR="${KC_HOME}/providers"
 
 echo "=========================================="
-echo "BySamio Keycloak - Flexible Variant"
+echo "SamSoft Technologies Keycloak - Flexible Variant"
 echo "=========================================="
 echo "User: $(id -u):$(id -g)"
 echo "Auto-build: ${KC_AUTO_BUILD}"

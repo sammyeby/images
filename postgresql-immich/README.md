@@ -1,11 +1,11 @@
 # PostgreSQL for Immich
 
-Dedicated PostgreSQL **17.11 / VectorChord 1.1.1 / pgvector 0.8.7** image for
-the private home-server photo pilot. This does not replace `bysamio/postgresql`
+Dedicated PostgreSQL **17.12 / VectorChord 1.1.1 / pgvector 0.8.7** image for
+the private home-server photo pilot. This does not replace `sammyeby/postgresql`
 or change Paperless. PostgreSQL 17 has support through 2029; the pilot has no
 existing database to migrate from PostgreSQL 14.
 
-The official 17.11 Alpine base is pinned by digest. Both extensions are compiled
+The official 17.12 Alpine base is pinned by digest. Both extensions are compiled
 from SHA256-verified upstream archives against that base's `/usr/local/bin/pg_config`.
 No glibc extension binaries are copied into musl. Cargo fetch uses the upstream
 lockfile and compilation runs offline. Rebuilds apply Alpine security updates.

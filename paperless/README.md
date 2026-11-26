@@ -1,18 +1,18 @@
-# BySam.io Paperless-ngx
+# SamSoft Technologies Paperless-ngx
 
-A small derivative of Paperless-ngx 3.3.2 for the PostgreSQL-based home-server
+A small derivative of Paperless-ngx 3.5.1 for the PostgreSQL-based home-server
 archive. This image fixes selected dependencies and applies narrow, source-verified
-chat retrieval and classification-budget corrections. It is a release candidate with remaining unfixed vulnerabilities;
+classification-budget correction and upstream chat retrieval fix. It is a release candidate with remaining unfixed vulnerabilities;
 publication does not clear it for processing personal documents.
 
 ## Contract
 
-- Preserve Paperless 3.3.2 behavior except the reviewed AI corrections below;
+- Preserve Paperless 3.5.1 behavior except the reviewed AI corrections below;
   retain `/init`, health check and volume paths.
-- Pin the official multi-platform base digest and the Ghostscript Trixie security
-  package version; verify all four Ghostscript packages are at least
+- Pin the official multi-platform base digest and apply available Trixie security
+  updates; verify all four Ghostscript packages are at least
   `10.05.1~dfsg-1+deb13u3`.
-- Patch fsspec with a hashed binary wheel. Check the complete installed Python
+- Patch NLTK and OAuthlib with hashed binary wheels. Check the complete installed Python
   environment for dependency conflicts. Preserve already-fixed dependencies.
 - Remove unused pip and its ensurepip bootstrap wheel, including vulnerable
   vendored msgpack, setuptools and urllib3. Upstream `uv` remains available.
@@ -26,7 +26,7 @@ publication does not clear it for processing personal documents.
   and reviewed build-time AI patches/token-budget helper.
 - Test real OCR, dependency checks and startup in disposable synthetic storage.
   Capture full image vulnerability evidence and gate publication before pushing.
-- Publish reviewed versions to `ghcr.io/bysamio/paperless-ngx`. Version `3.3.2-r1`
+- Publish reviewed versions to `ghcr.io/sammyeby/paperless-ngx`. Version `3.5.1-r1`
   receives a unique `<version>-<run-id>-<attempt>` tag; no tag is reused and no
   `latest` alias is published. Consumers pin the recorded registry digest.
 
@@ -81,7 +81,7 @@ directory and the upstream rootless mode:
 
 ```yaml
 webserver:
-  image: ghcr.io/bysamio/paperless-ngx@sha256:<verified-published-digest>
+  image: ghcr.io/sammyeby/paperless-ngx@sha256:<verified-published-digest>
   user: "1000:1000" # substitute the owner of your application bind mounts
   cap_drop: [ALL]
   security_opt: ["no-new-privileges:true"]
@@ -95,27 +95,15 @@ Leave `USERMAP_UID`/`USERMAP_GID` out of the **container environment**; Compose 
 use those names locally to substitute its `user` field. The application port and
 volume paths remain upstream defaults.
 
-## Chat retrieval correction in 3.3.2-r1
+## Upstream chat retrieval
 
-The upstream chat path retrieved permission-filtered nodes for citations, then
-retrieved/embedded the same query again through `RetrieverQueryEngine.query`.
-The derivative passes the first nodes directly to the installed response
-synthesizer. Citations and generation now use the same nodes. Permission filters,
-trash exclusion, templates, shared-lock lifetime and streaming remain intact.
+Paperless 3.5.1 synthesizes the permission-filtered retrieved nodes directly.
+The old retrieval correction is retired; upstream's shorter index-lock lifetime
+and ASGI streaming behavior are retained. The synthetic `make test-ai` suite
+continues to verify one retrieval/generation, citations, trash exclusion and
+permission boundaries using real retrieval on disposable data.
 
-The build refuses unknown upstream `chat.py` bytes and records original/patched
-SHA256 values in `/usr/share/bysamio/ai-chat-fix.json`. The synthetic `make test-ai`
-regression uses the real SQLite vector store, retriever and streaming synthesizer
-with mock embeddings/generation in RAM. It checks ordinary visibility and
-unrestricted trash exclusion, citation scope, streamed content and exactly one
-query embedding. A larger synthetic context also checks that fitting evidence
-needs one generation call, preserves both source facts and retains citations. It failed on the published r1 image with two embeddings and
-passes on the local candidate with one. No family documents or model calls are
-used. This local regression does not establish production UI latency or fix the
-production classification context handling; native provider and UI validation
-remain deployment gates.
-
-## Complete prompt budgeting in 3.3.2-r1
+## Complete prompt budgeting in 3.5.1-r1
 
 The upstream classifier independently truncated document content and related
 context before joining them, allowing the final request to exceed its context.
@@ -152,7 +140,7 @@ retrieval depth and the persistent index are unchanged. A real retrieval and
 synthesis regression reproduced two sequential generation calls for evidence
 that fits one prompt; the corrected candidate makes one call.
 
-The candidate now uses official stable 3.3.2, including its document-version and
+The candidate now uses official stable 3.5.1, including its document-version and
 ownerless-classification permission fixes. Classification uses effective content
 from the current document version. A disposable ORM regression checks ownerless
 vector and full-text classification against private documents/taxonomy, including

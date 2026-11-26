@@ -1,11 +1,11 @@
 #!/bin/sh
 set -e
 
-# BySamio PostgreSQL Entrypoint
+# SamSoft Technologies PostgreSQL Entrypoint
 # This script wraps the official PostgreSQL entrypoint for non-root execution.
 # The image intentionally removes gosu and does not support root startup.
 
-echo "BySamio PostgreSQL - Starting as user $(id -u):$(id -g)"
+echo "SamSoft Technologies PostgreSQL - Starting as user $(id -u):$(id -g)"
 
 # Verify we're running as non-root
 if [ "$(id -u)" = "0" ]; then

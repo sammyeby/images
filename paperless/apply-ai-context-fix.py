@@ -70,25 +70,25 @@ apply('ai_classifier.py', 'aa57804b7455da617970ea49101c86d3fa02000a75e817995fe44
 '''),
 ])
 
-apply('chat.py', 'c260d912a1af37ebfad9ba30cb66bca2627dbcff42fb21ddeafecaa1d433b364', [
-    ('''                chunk_size=config.llm_embedding_chunk_size,
-''', '''                # Generation packing uses available answer context, independently
-                # of index chunks. Leave room for provider-specific chat framing.
-                chunk_size=config.llm_context_size,
+apply('chat.py', 'b4baf40ff85e7d96ed133d0ce85600d0b9adb863595b6a7f62490a410a1fec23', [
+    ('''            chunk_size=config.llm_embedding_chunk_size,
+''', '''            # Generation packing uses available answer context, independently
+            # of index chunks. Leave room for provider-specific chat framing.
+            chunk_size=config.llm_context_size,
 '''),
     ('''from paperless_ai.indexing import read_store
 ''', '''from paperless_ai.indexing import read_store
 from paperless_ai.token_budget import generation_tokenizer
 '''),
-    ('''                context_size=config.llm_context_size,
-            ),
-            text_qa_template=''', '''                context_size=config.llm_context_size - 256,
-                tokenizer=generation_tokenizer(config),
-            ),
-            text_qa_template='''),
+    ('''            context_size=config.llm_context_size,
+        ),
+        text_qa_template=''', '''            context_size=config.llm_context_size - 256,
+            tokenizer=generation_tokenizer(config),
+        ),
+        text_qa_template='''),
 ])
 
-apply('indexing.py', '3ab3a9586e6018b075a2b60af6392c29b6a67de1a9c584d6e8e61eccc6d1a90a', [
+apply('indexing.py', '87f5b201f2556adc5e914769e39f2a917e29089a52870074660f6b2bc8c911d8', [
     ('''def get_rag_prompt_helper(
     *,
     chunk_size: int | None = None,

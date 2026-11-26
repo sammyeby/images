@@ -13,7 +13,7 @@ const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function main() {
   const version = await (await fetch(base + '/api/server/version')).json();
-  assert.deepEqual(version, {major: 3, minor: 3, patch: 5, prerelease: null});
+  assert.deepEqual(version, {major: 3, minor: 4, patch: 2, prerelease: null, featureLevel: 2});
   assert.equal((await fetch(base)).status, 200);
   const specification = await (await fetch(base + '/api/spec.json')).json();
   assert.equal(specification.components.schemas.ApiKeyCreateDto.type, 'object');

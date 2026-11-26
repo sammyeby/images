@@ -36,7 +36,7 @@ sql <<'SQL'
 CREATE EXTENSION vchord CASCADE;
 CREATE EXTENSION earthdistance CASCADE;
 DO $$ BEGIN
-  IF current_setting('server_version_num')::int < 170011 THEN RAISE EXCEPTION 'old PostgreSQL'; END IF;
+  IF current_setting('server_version_num')::int NOT BETWEEN 170012 AND 179999 THEN RAISE EXCEPTION 'expected patched PostgreSQL 17'; END IF;
   IF (SELECT extversion FROM pg_extension WHERE extname='vector') <> '0.8.7' THEN RAISE EXCEPTION 'wrong vector'; END IF;
   IF (SELECT extversion FROM pg_extension WHERE extname='vchord') <> '1.1.1' THEN RAISE EXCEPTION 'wrong vchord'; END IF;
 END $$;

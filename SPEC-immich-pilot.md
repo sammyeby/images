@@ -5,8 +5,8 @@ verification, publication and staged deployment sequence on 2026-10-31.
 
 | Module | Contract | Depends on |
 |---|---|---|
-| postgresql-immich | Dedicated PostgreSQL 17.11, pgvector 0.8.7, VectorChord 1.1.1, cube and earthdistance; UID/GID 1001; PGDATA /var/lib/postgresql/pgdata | official PostgreSQL |
-| immich | Preserve upstream 3.3.5 application/mobile protocol, assets and media tooling; rebuild Node server/CLI with reviewed security dependency pins; update native Brotli | upstream Immich |
+| postgresql-immich | Dedicated PostgreSQL 17.12, pgvector 0.8.7, VectorChord 1.1.1, cube and earthdistance; UID/GID 1001; PGDATA /var/lib/postgresql/pgdata | official PostgreSQL |
+| immich | Preserve upstream 3.4.2 application/mobile protocol, assets and media tooling; rebuild Node server/CLI with reviewed security dependency pins; update native Brotli | upstream Immich |
 | publication | Native amd64 runtime tests and full findings/SBOM before registry login; publish the same tested artifact under a unique tag | both images |
 
 Build order: PostgreSQL extension proof, patched Immich, combined empty-data

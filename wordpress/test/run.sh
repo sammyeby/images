@@ -11,7 +11,7 @@ PORT=${PORT:-18080}
 
 name="bysamio-wp-test-$$"
 url="http://127.0.0.1:$PORT"
-title="BySamio Image Test"
+title="SamSoft Technologies Image Test"
 # Synthetic, throwaway credentials for an isolated test network only.
 db_password="synthetic-test-only"
 admin_password="synthetic-test-only-Admin1"

@@ -1,165 +1,41 @@
-# BySamio Keycloak - Security-Hardened Images
+# SamSoft Technologies Keycloak - Security-Hardened Images
 # Provides multiple variants for different use cases:
 #   - default (alpine): Runtime provider/SPI loading, init container support
 #   - optimized (distroless): Maximum security, near-zero CVEs, fast startup
 #   - debug (distroless-debug): Troubleshooting with shell access
 #
 # Build variants:
-#   docker build --target default -t ghcr.io/bysamio/keycloak:26.7.4 .
-#   docker build --target optimized -t ghcr.io/bysamio/keycloak:26.7.4-optimized .
+#   docker build --target default -t ghcr.io/sammyeby/keycloak:26.8.2 .
+#   docker build --target optimized -t ghcr.io/sammyeby/keycloak:26.8.2-optimized .
 #
 # Run:
-#   docker run -p 8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin ghcr.io/bysamio/keycloak:latest
+#   docker run -p 8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin ghcr.io/sammyeby/keycloak:latest
 
-ARG KEYCLOAK_VERSION=26.7.4
-ARG OTEL_PATCH_VERSION=1.62.0
-ARG KEYCLOAK_OTEL_VERSION=1.57.0
-ARG OTEL_INCUBATOR_PATCH_VERSION=1.62.0-alpha
-ARG KEYCLOAK_OTEL_INCUBATOR_VERSION=1.57.0-alpha
-ARG NETTY_PATCH_VERSION=4.1.138.Final
-ARG KEYCLOAK_NETTY_VERSION=4.1.136.Final
-ARG BOUNCYCASTLE_PATCH_VERSION=1.86
-ARG KEYCLOAK_BOUNCYCASTLE_VERSION=1.84
+ARG KEYCLOAK_VERSION=26.8.2
+ARG GUAVA_PATCH_VERSION=33.7.2-jre
+ARG KEYCLOAK_GUAVA_VERSION=33.6.0-jre
 
-# =============================================================================
-# Stage 1: Dependency Patches - Backport fixed JARs until upstream catches up
-# =============================================================================
+# Keycloak 26.8.2 includes the Jackson (including admin CLI), FreeMarker,
+# OpenTelemetry, Netty and Bouncy Castle fixes previously overlaid here.
+# Only Guava still needs a backport for CVE-2026-102554.
+# Source: https://github.com/keycloak/keycloak/releases/tag/26.8.2
 FROM alpine:3.22 AS dependency-patches
-
-ARG OTEL_PATCH_VERSION
-ARG KEYCLOAK_OTEL_VERSION
-ARG OTEL_INCUBATOR_PATCH_VERSION
-ARG KEYCLOAK_OTEL_INCUBATOR_VERSION
-ARG NETTY_PATCH_VERSION
-ARG KEYCLOAK_NETTY_VERSION
-ARG BOUNCYCASTLE_PATCH_VERSION
-ARG KEYCLOAK_BOUNCYCASTLE_VERSION
-
+ARG GUAVA_PATCH_VERSION
+ARG KEYCLOAK_GUAVA_VERSION
 RUN apk add --no-cache ca-certificates curl
-
 WORKDIR /patches
-
-# Keycloak 26.7.4 ships OpenTelemetry 1.57.0, which upstream has not yet
-# advanced. Keep the original filenames to preserve Keycloak's generated
-# classpath, while replacing contents with 1.62.0 to fix CVE-2026-45292
-# (unbounded memory allocation in W3C Baggage Propagation).
+# Preserve the upstream filename for Keycloak's generated Quarkus classpath.
+# Remove this overlay once upstream ships Guava 33.7.2-jre or newer.
 RUN set -eux; \
-    for artifact in \
-        opentelemetry-api \
-        opentelemetry-common \
-        opentelemetry-context \
-        opentelemetry-sdk \
-        opentelemetry-sdk-common \
-        opentelemetry-sdk-logs \
-        opentelemetry-sdk-metrics \
-        opentelemetry-sdk-trace \
-        opentelemetry-exporter-common \
-        opentelemetry-exporter-otlp \
-        opentelemetry-exporter-otlp-common \
-        opentelemetry-sdk-extension-autoconfigure \
-        opentelemetry-sdk-extension-autoconfigure-spi; do \
-        base_url="https://repo1.maven.org/maven2/io/opentelemetry/${artifact}/${OTEL_PATCH_VERSION}"; \
-        patched_name="io.opentelemetry.${artifact}-${KEYCLOAK_OTEL_VERSION}.jar"; \
-        curl -fsSLo "${patched_name}" "${base_url}/${artifact}-${OTEL_PATCH_VERSION}.jar"; \
-        curl -fsSLo "${patched_name}.sha512" "${base_url}/${artifact}-${OTEL_PATCH_VERSION}.jar.sha512"; \
-        echo "$(cat "${patched_name}.sha512")  ${patched_name}" | sha512sum -c -; \
-        rm "${patched_name}.sha512"; \
-    done
-
-# Patch opentelemetry-api-incubator (alpha variant, separate Maven group path)
-RUN set -eux; \
-    base_url="https://repo1.maven.org/maven2/io/opentelemetry/opentelemetry-api-incubator/${OTEL_INCUBATOR_PATCH_VERSION}"; \
-    patched_name="io.opentelemetry.opentelemetry-api-incubator-${KEYCLOAK_OTEL_INCUBATOR_VERSION}.jar"; \
-    curl -fsSLo "${patched_name}" "${base_url}/opentelemetry-api-incubator-${OTEL_INCUBATOR_PATCH_VERSION}.jar"; \
-    curl -fsSLo "${patched_name}.sha512" "${base_url}/opentelemetry-api-incubator-${OTEL_INCUBATOR_PATCH_VERSION}.jar.sha512"; \
+    base_url="https://repo1.maven.org/maven2/com/google/guava/guava/${GUAVA_PATCH_VERSION}"; \
+    patched_name="com.google.guava.guava-${KEYCLOAK_GUAVA_VERSION}.jar"; \
+    curl -fsSLo "${patched_name}" "${base_url}/guava-${GUAVA_PATCH_VERSION}.jar"; \
+    curl -fsSLo "${patched_name}.sha512" "${base_url}/guava-${GUAVA_PATCH_VERSION}.jar.sha512"; \
     echo "$(cat "${patched_name}.sha512")  ${patched_name}" | sha512sum -c -; \
     rm "${patched_name}.sha512"
 
-# Keycloak 26.7.4 ships Netty 4.1.136.Final, which carries CVE-2026-75595
-# (CRITICAL) in netty-handler, along with CVE-2026-75596 and CVE-2026-49844 in
-# the same module and CVE-2026-59903 (information disclosure via CORS Vary
-# header overwrite) in netty-codec-http. Upstream fixes them in 4.1.137.Final;
-# 26.7.4 is the newest Keycloak release, so there is no version to bump to.
-#
-# Every Netty module is replaced, not just netty-handler: they share internal
-# APIs and are only supported in lockstep, so a mixed 4.1.136/4.1.138 classpath
-# is not a configuration upstream tests. Filenames keep the 4.1.136.Final
-# version so Keycloak's generated classpath still resolves.
-#
-# Revisit when a Keycloak release ships 4.1.137.Final or newer, at which point
-# this whole block should be deleted rather than re-pinned — see the Jackson and
-# pgJDBC overlays removed in the 26.7.3 bump for why a stale overlay is worse
-# than none.
-RUN set -eux; \
-    for artifact in \
-        netty-buffer \
-        netty-codec \
-        netty-codec-dns \
-        netty-codec-haproxy \
-        netty-codec-http \
-        netty-codec-http2 \
-        netty-codec-socks \
-        netty-common \
-        netty-handler \
-        netty-handler-proxy \
-        netty-resolver \
-        netty-resolver-dns \
-        netty-transport \
-        netty-transport-classes-epoll \
-        netty-transport-native-unix-common; do \
-        base_url="https://repo1.maven.org/maven2/io/netty/${artifact}/${NETTY_PATCH_VERSION}"; \
-        patched_name="io.netty.${artifact}-${KEYCLOAK_NETTY_VERSION}.jar"; \
-        curl -fsSLo "${patched_name}" "${base_url}/${artifact}-${NETTY_PATCH_VERSION}.jar"; \
-        curl -fsSLo "${patched_name}.sha512" "${base_url}/${artifact}-${NETTY_PATCH_VERSION}.jar.sha512"; \
-        echo "$(cat "${patched_name}.sha512")  ${patched_name}" | sha512sum -c -; \
-        rm "${patched_name}.sha512"; \
-    done
-
-# The native epoll transport ships one JAR per platform classifier, and Keycloak
-# bundles both so a single image runs on amd64 and arm64.
-RUN set -eux; \
-    base_url="https://repo1.maven.org/maven2/io/netty/netty-transport-native-epoll/${NETTY_PATCH_VERSION}"; \
-    for classifier in linux-aarch_64 linux-x86_64; do \
-        upstream="netty-transport-native-epoll-${NETTY_PATCH_VERSION}-${classifier}.jar"; \
-        patched_name="io.netty.netty-transport-native-epoll-${KEYCLOAK_NETTY_VERSION}-${classifier}.jar"; \
-        curl -fsSLo "${patched_name}" "${base_url}/${upstream}"; \
-        curl -fsSLo "${patched_name}.sha512" "${base_url}/${upstream}.sha512"; \
-        echo "$(cat "${patched_name}.sha512")  ${patched_name}" | sha512sum -c -; \
-        rm "${patched_name}.sha512"; \
-    done
-
-# Keycloak 26.7.4 ships Bouncy Castle 1.84, which carries CVE-2026-8763
-# (CRITICAL, name constraints bypass via trailing dot) and CVE-2026-13506
-# (HIGH, DoS via lazy ASN.1 sequence), both fixed in 1.85. 1.86 is what the
-# Quarkus 3.33 BOM that Keycloak 26.7.x builds on now pins, so it is the likeliest
-# version for upstream to ship next.
-#
-# bcpkix and bcutil are replaced alongside bcprov because Bouncy Castle only
-# supports its jars at matching versions. The admin CLI carries its own bcprov
-# in bin/client/lib, so it goes to a separate directory that the server-lib glob
-# in the next stage does not match.
-#
-# Delete this block once a Keycloak release ships Bouncy Castle 1.85 or newer.
-RUN set -eux; \
-    mkdir -p client; \
-    for artifact in bcprov-jdk18on bcpkix-jdk18on bcutil-jdk18on; do \
-        base_url="https://repo1.maven.org/maven2/org/bouncycastle/${artifact}/${BOUNCYCASTLE_PATCH_VERSION}"; \
-        patched_name="org.bouncycastle.${artifact}-${KEYCLOAK_BOUNCYCASTLE_VERSION}.jar"; \
-        curl -fsSLo "${patched_name}" "${base_url}/${artifact}-${BOUNCYCASTLE_PATCH_VERSION}.jar"; \
-        curl -fsSLo "${patched_name}.sha512" "${base_url}/${artifact}-${BOUNCYCASTLE_PATCH_VERSION}.jar.sha512"; \
-        echo "$(cat "${patched_name}.sha512")  ${patched_name}" | sha512sum -c -; \
-        rm "${patched_name}.sha512"; \
-    done; \
-    cp "org.bouncycastle.bcprov-jdk18on-${KEYCLOAK_BOUNCYCASTLE_VERSION}.jar" \
-       "client/bcprov-jdk18on-${KEYCLOAK_BOUNCYCASTLE_VERSION}.jar"
-
-# =============================================================================
-# Stage 2: Keycloak Patched Base - Official distribution with patched deps
-# =============================================================================
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION} AS keycloak-patched
-
 COPY --from=dependency-patches /patches/*.jar /opt/keycloak/lib/lib/main/
-COPY --from=dependency-patches /patches/client/*.jar /opt/keycloak/bin/client/lib/
 
 # =============================================================================
 # Stage 3: Optimized Builder - Build optimized Keycloak (for distroless variant)
@@ -183,14 +59,14 @@ RUN /opt/keycloak/bin/kc.sh build \
     --db=postgres
 
 # =============================================================================
-# Stage 4: Optimized - Distroless production image (use tag: 26.7.4-optimized)
+# Stage 4: Optimized - Distroless production image (use tag: 26.8.2-optimized)
 # =============================================================================
 FROM gcr.io/distroless/java21-debian13:nonroot AS optimized
 
-LABEL org.opencontainers.image.title="BySamio Keycloak (Optimized)"
+LABEL org.opencontainers.image.title="SamSoft Technologies Keycloak (Optimized)"
 LABEL org.opencontainers.image.description="Optimized Keycloak with near-zero CVEs, config locked at build time"
-LABEL org.opencontainers.image.vendor="BySam.io"
-LABEL org.opencontainers.image.source="https://github.com/bysamio/images"
+LABEL org.opencontainers.image.vendor="SamSoft Technologies"
+LABEL org.opencontainers.image.source="https://github.com/sammyeby/images"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 LABEL org.opencontainers.image.base.name="gcr.io/distroless/java21-debian13:nonroot"
 
@@ -241,13 +117,14 @@ ENTRYPOINT [ \
 CMD ["start", "--optimized"]
 
 # =============================================================================
-# Stage 5: Debug variant - For troubleshooting (use tag: 26.7.4-debug)
+# Stage 5: Debug variant - For troubleshooting (use tag: 26.8.2-debug)
 # =============================================================================
 FROM gcr.io/distroless/java21-debian13:debug-nonroot AS debug
 
-LABEL org.opencontainers.image.title="BySamio Keycloak (Debug)"
+LABEL org.opencontainers.image.title="SamSoft Technologies Keycloak (Debug)"
 LABEL org.opencontainers.image.description="Debug variant with shell access for troubleshooting"
-LABEL org.opencontainers.image.vendor="BySam.io"
+LABEL org.opencontainers.image.vendor="SamSoft Technologies"
+LABEL org.opencontainers.image.source="https://github.com/sammyeby/images"
 
 COPY --from=optimized-builder --chown=65532:65532 /opt/keycloak /opt/keycloak
 
@@ -284,7 +161,7 @@ ENTRYPOINT [ \
 CMD ["start", "--optimized"]
 
 # =============================================================================
-# Stage 6: Default - Runtime provider loading support (use tag: 26.7.4, latest)
+# Stage 6: Default - Runtime provider loading support (use tag: 26.8.2, latest)
 # =============================================================================
 # This is the DEFAULT variant - supports runtime customization:
 # - Runtime provider/SPI loading via volume mounts
@@ -306,10 +183,10 @@ WORKDIR /opt/keycloak
 # =============================================================================
 FROM eclipse-temurin:21-jre-alpine AS default
 
-LABEL org.opencontainers.image.title="BySamio Keycloak"
+LABEL org.opencontainers.image.title="SamSoft Technologies Keycloak"
 LABEL org.opencontainers.image.description="Keycloak with runtime provider support and auto-build"
-LABEL org.opencontainers.image.vendor="BySam.io"
-LABEL org.opencontainers.image.source="https://github.com/bysamio/images"
+LABEL org.opencontainers.image.vendor="SamSoft Technologies"
+LABEL org.opencontainers.image.source="https://github.com/sammyeby/images"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 LABEL org.opencontainers.image.base.name="eclipse-temurin:21-jre-alpine"
 

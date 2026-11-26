@@ -83,7 +83,8 @@ assert importlib.util.find_spec("pip") is None, "unused vulnerable pip remains"
 assert not list(Path("/usr/local/lib/python3.14/ensurepip/_bundled").glob("pip-*.whl")), "pip bootstrap wheel remains"
 from importlib.metadata import version
 assert version("fsspec") == "2026.6.0", version("fsspec")
-assert version("filelock") == "4.0.12", version("filelock")
+from packaging.version import Version
+assert Version(version("filelock")) >= Version("4.2.1"), version("filelock")
 
 status = dict(line.split(":", 1) for line in Path("/proc/self/status").read_text().splitlines() if ":" in line)
 assert int(status["CapEff"].strip(), 16) == 0, "effective capabilities remain"

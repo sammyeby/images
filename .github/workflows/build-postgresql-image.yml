@@ -1,4 +1,4 @@
-name: Build BySamio PostgreSQL Image
+name: Build SamSoft Technologies PostgreSQL Image
 
 on:
   push:
@@ -18,7 +18,7 @@ on:
       postgresql_version:
         description: 'PostgreSQL version to build'
         required: false
-        default: '17.10'
+        default: '17.12'
       push_image:
         description: 'Push image to registry'
         required: false
@@ -27,8 +27,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: bysamio/postgresql
-  POSTGRESQL_VERSION: ${{ github.event.inputs.postgresql_version || '17.10' }}
+  IMAGE_NAME: sammyeby/postgresql
+  POSTGRESQL_VERSION: ${{ github.event.inputs.postgresql_version || '17.12' }}
 
 jobs:
   build:
@@ -147,7 +147,7 @@ jobs:
       - name: Test image runs as non-root
         run: |
           # Verify the image runs as non-root (UID 1001)
-          USER_ID=$(docker run --rm postgresql:test id -u)
+          USER_ID=$(docker run --rm --entrypoint id postgresql:test -u)
           if [ "$USER_ID" != "1001" ]; then
             echo "ERROR: Container is running as UID $USER_ID, expected 1001"
             exit 1

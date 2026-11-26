@@ -1,9 +1,9 @@
-# BySamio WordPress - Build and Test Commands
+# SamSoft Technologies WordPress - Build and Test Commands
 # Usage: make <target>
 
 REGISTRY := ghcr.io
-IMAGE_NAME := bysamio/wordpress
-WORDPRESS_VERSION := 7.1.3
+IMAGE_NAME := sammyeby/wordpress
+WORDPRESS_VERSION := 7.1.5
 TAG := $(WORDPRESS_VERSION)
 CONTAINER_ENGINE ?= docker
 IMAGE ?= wordpress:local
@@ -12,7 +12,7 @@ TRIVY ?= trivy
 .PHONY: help build build-local push test test-nonroot test-security test-health test-php-release scan scan-report run run-with-db clean
 
 help: ## Show this help message
-	@echo "BySamio WordPress - Build Commands"
+	@echo "SamSoft Technologies WordPress - Build Commands"
 	@echo ""
 	@echo "Usage: make <target>"
 	@echo ""

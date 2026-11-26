@@ -1,4 +1,4 @@
-# BySamio PostgreSQL
+# SamSoft Technologies PostgreSQL
 
 A security-hardened PostgreSQL Docker image based on the official PostgreSQL Alpine image, optimized for Kubernetes environments with enhanced security features.
 
@@ -21,7 +21,7 @@ A security-hardened PostgreSQL Docker image based on the official PostgreSQL Alp
 docker run -d \
   -p 5432:5432 \
   -e POSTGRES_PASSWORD=secretpassword \
-  ghcr.io/bysamio/postgresql:17.10
+  ghcr.io/sammyeby/postgresql:17.12
 
 # Connect with psql
 psql -h localhost -U postgres -d postgres
@@ -42,9 +42,9 @@ See the [Helm Values](#helm-deployment) section below.
 
 | Tag | Description |
 |-----|-------------|
-| `17.10` | PostgreSQL 17.10 on Alpine |
-| `17.10-alpine` | PostgreSQL 17.10 on Alpine (explicit Alpine tag) |
-| `latest` | Latest stable version (currently 17.10-alpine) |
+| `17.12` | PostgreSQL 17.12 on Alpine |
+| `17.12-alpine` | PostgreSQL 17.12 on Alpine (explicit Alpine tag) |
+| `latest` | Latest stable version (currently 17.12-alpine) |
 
 All tags are based on Alpine Linux for minimal size and reduced attack surface.
 
@@ -82,7 +82,7 @@ docker run -d \
   -p 5432:5432 \
   -e POSTGRES_PASSWORD=secret \
   -v ./init-scripts:/docker-entrypoint-initdb.d:ro \
-  ghcr.io/bysamio/postgresql:17.10
+  ghcr.io/sammyeby/postgresql:17.12
 ```
 
 Scripts are executed in alphabetical order during first startup.
@@ -91,11 +91,11 @@ Scripts are executed in alphabetical order during first startup.
 
 ```bash
 # Using with a PostgreSQL Helm chart
-helm install postgresql oci://ghcr.io/bysamio/charts/postgresql \
+helm install postgresql oci://ghcr.io/sammyeby/charts/postgresql \
   -f values.yaml \
   --set image.registry=ghcr.io \
-  --set image.repository=bysamio/postgresql \
-  --set image.tag=17.10
+  --set image.repository=sammyeby/postgresql \
+  --set image.tag=17.12
 ```
 
 ### Key Helm Values
@@ -103,8 +103,8 @@ helm install postgresql oci://ghcr.io/bysamio/charts/postgresql \
 ```yaml
 image:
   registry: ghcr.io
-  repository: bysamio/postgresql
-  tag: "17.10"
+  repository: sammyeby/postgresql
+  tag: "17.12"
 
 # Security context (matches image UID/GID)
 primary:
@@ -180,7 +180,7 @@ Expected CVE count: **5-15** (Alpine base with PostgreSQL)
 
 | Image | Base | CVEs (typical) | Size |
 |-------|------|----------------|------|
-| **BySamio** | Alpine | 5-15 | ~85MB |
+| **SamSoft Technologies** | Alpine | 5-15 | ~85MB |
 | Official PostgreSQL | Debian | 50-150 | ~425MB |
 | Bitnami PostgreSQL | Debian | 30-80 | ~350MB |
 
@@ -205,7 +205,7 @@ docker run -d \
   -e POSTGRES_PASSWORD=secret \
   -e POSTGRES_REPLICATION_USER=repl_user \
   -e POSTGRES_REPLICATION_PASSWORD=repl_secret \
-  ghcr.io/bysamio/postgresql:17.10
+  ghcr.io/sammyeby/postgresql:17.12
 
 # Replica (using streaming replication)
 # Configure via pg_basebackup and recovery.conf
@@ -217,6 +217,6 @@ This image is provided under the PostgreSQL License, consistent with PostgreSQL'
 
 ## Links
 
-- [BySamio Images Repository](https://github.com/bysamio/images)
+- [SamSoft Technologies Images Repository](https://github.com/sammyeby/images)
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 - [Official PostgreSQL Docker Image](https://hub.docker.com/_/postgres)
